@@ -4,14 +4,19 @@ https://github.com/docker-library/official-images/blob/master/library/backdrop
 
 # Supported tags and respective `Dockerfile` links
 
-- [`1.26.1-apache`, `1.26.1`, `1-apache`, `1` (*1/apache/Dockerfile*)](https://github.com/kalabox/backdrop-docker/blob/master/1/apache/Dockerfile)
-- [`1.26.1-fpm`, `1-fpm` (*1/fpm/Dockerfile*)](https://github.com/kalabox/backdrop-docker/blob/master/1/fpm/Dockerfile)
+- [`1.29.2-apache`, `1.29.2`, `1-apache`, `1` (*1/apache/Dockerfile*)](https://github.com/kalabox/backdrop-docker/blob/master/1/apache/Dockerfile)
+- [`1.29.2-fpm`, `1-fpm` (*1/fpm/Dockerfile*)](https://github.com/kalabox/backdrop-docker/blob/master/1/fpm/Dockerfile)
 
 [![](https://badge.imagelayers.io/kalabox/backdrop:latest.svg)](https://imagelayers.io/?images=kalabox/backdrop:latest 'Get your own badge on imagelayers.io')
 
 # What is Backdrop?
 
-The comprehensive CMS for small to medium sized businesses and non-profits.
+Backdrop is a web application development framework frequenty deployed in the guise of a Content Management System (or "website") for use by:
+- Primary, Secondary and Tertiary Educational Institutions
+- National, Regional and Municipal Governments
+- Small & Medium Sized Enterprises
+- Non-Governmental Organizations
+- Non-Profit Organizations
 
 ![logo](https://backdropcms.org/files/inline-images/Backdrop-Logo-Vertical_0.png)
 
@@ -20,7 +25,7 @@ The comprehensive CMS for small to medium sized businesses and non-profits.
 The basic pattern for starting a `backdrop` instance is:
 
 ```console
-$ docker run --name some-backdrop --link some-mysql:mysql -d backdrop/backdrop
+docker run --name some-backdrop --link some-mysql:mysql -d backdrop/backdrop
 ```
 
 The following environment variables are also honored for configuring your Backdrop CMS instance:
@@ -37,7 +42,7 @@ The `BACKDROP_DB_NAME` **must already exist** on the given MySQL server. Check o
 If you'd like to be able to access the instance from the host without the container's IP, standard port mappings can be used:
 
 ```console
-$ docker run --name some-backdrop --link some-mysql:mysql -p 8080:80 -d backdrop/backdrop
+docker run --name some-backdrop --link some-mysql:mysql -p 8080:80 -d backdrop/backdrop
 ```
 
 Then, access it via `http://localhost:8080` or `http://host-ip:8080` in a browser.
@@ -45,7 +50,7 @@ Then, access it via `http://localhost:8080` or `http://host-ip:8080` in a browse
 If you'd like to use an external database instead of a linked `mysql` container, specify the hostname and port with `BACKDROP_DB_HOST`/`BACKDROP_DB_PORT` along with the password in `BACKDROP_DB_PASSWORD` and the username in `BACKDROP_DB_USER` (if it is something other than `root`):
 
 ```console
-$ docker run --name some-backdrop \
+docker run --name some-backdrop \
   -e BACKDROP_DB_HOST=10.1.2.3 \
   -e BACKDROP_DB_PORT=10432 \
   -e BACKDROP_DB_USER=... \
@@ -58,21 +63,23 @@ $ docker run --name some-backdrop \
 Example `docker-compose.yml` for `backdrop`:
 
 ```yaml
-backdrop:
-  image: backdrop/backdrop
-  links:
-    - db:mysql
-  ports:
+services:
+  backdrop:
+    image: backdrop
+    ports:
     - 8080:80
+    environment:
+      BACKDROP_DB_HOST: db
+      BACKDROP_DB_USER: backdrop
+      BACKDROP_DB_PASSWORD: backdrop
 
-db:
-  image: mysql
-  environment:
-    MYSQL_USER: backdrop
-    MYSQL_PASSWORD: backdrop
-    MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-    MYSQL_DATABASE: backdrop
-
+  db:
+    image: mysql
+    environment:
+      MYSQL_USER: backdrop
+      MYSQL_PASSWORD: backdrop
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_DATABASE: backdrop
 ```
 
 Run `docker-compose up`, wait for it to initialize completely, and visit `http://localhost:8080` or `http://host-ip:8080`.
@@ -91,14 +98,6 @@ The following Docker Hub features can help with the task of keeping your depende
 # License
 
 View [license information](https://www.drupal.org/licensing/faq) for the software contained in this image.
-
-# Supported Docker versions
-
-This image is officially supported on Docker version 1.10.3.
-
-Support for older versions (down to 1.6) is provided on a best-effort basis.
-
-Please see [the Docker installation documentation](https://docs.docker.com/installation/) for details on how to upgrade your Docker daemon.
 
 # User Feedback
 
